@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini-Nequi</title>
+<style>
+  body{font-family:Arial,sans-serif;background:#f0f2f5;color:#111;display:flex;flex-direction:column;align-items:center;padding:20px}
+  h1{color:#00c37a}
+  .balance{font-size:2rem;margin:20px 0}
+  form{margin:10px 0}
+  input{padding:8px;margin-right:8px;border-radius:5px;border:1px solid #ccc}
+  button{padding:8px 12px;border:none;border-radius:5px;background:#00c37a;color:#fff;cursor:pointer}
+  ul{list-style:none;padding:0}
+  li{margin:5px 0}
+</style>
+</head>
+<body>
+<h1>Mini-Nequi</h1>
+<div class="balance" id="balance">$0</div>
+<form id="myNumberForm">
+<input type="tel" id="myNumber" placeholder="Tu número" required pattern="[0-9]{7,15}">
+<button type="submit">Registrar y +$1.000</button>
+</form>
+<form id="inviteForm">
+<input type="tel" id="inviteNumber" placeholder="Número invitado" required pattern="[0-9]{7,15}">
+<button type="submit">Añadir invitado</button>
+</form>
+<ul id="invitedList"></ul>
+<script>
+let balance = 0;
+let myNumberRegistered = false;
+const invitedSet = new Set();
+const balanceEl = document.getElementById('balance');
+const myForm = document.getElementById('myNumberForm');
+const inviteForm = document.getElementById('inviteForm');
+const invitedList = document.getElementById('invitedList');
+function updateUI(){balanceEl.textContent='$'+balance.toLocaleString();}
+myForm.addEventListener('submit',e=>{
+e.preventDefault();
+if(myNumberRegistered){alert('Ya registraste tu número');return;}
+myNumberRegistered=true;
+balance+=1000;
+updateUI();
+myForm.querySelector('button').disabled=true;
+myForm.querySelector('input').disabled=true;
+});
+inviteForm.addEventListener('submit',e=>{
+e.preventDefault();
+const num=document.getElementById('inviteNumber').value.trim();
+if(invitedSet.has(num)){alert('Ese invitado ya fue añadido');return;}
+invitedSet.add(num);
+balance+=1000;
+updateUI();
+const li=document.createElement('li');
+li.textContent=num;
+invitedList.prepend(li);
+inviteForm.reset();
+});
+updateUI();
+</script>
+</body>
+</html>
